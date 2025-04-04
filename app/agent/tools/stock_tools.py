@@ -2,7 +2,7 @@ import yfinance as yf
 from langchain.tools import BaseTool
 from pydantic import BaseModel, Field
 from typing import Optional, Type 
-
+import re
 
 class StockPriceInput(BaseModel):
     ticker: str = Field(..., description="Stock ticker symbol (e.g., AAPL, MSFT)") 
@@ -46,16 +46,25 @@ Timestamp: {data.index[-1].strftime('%Y-%m-%d %H:%M:%S')}
         # For async implementation
         return self._run(ticker)
 
-class StockAnalysisInput(BaseModel):
-    ticker: str = Field(..., description="Stock ticker symbol to analyze")
-    period: str = Field(default="6mo", description="Time period for analysis (1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max)")
+# class StockAnalysisInput(BaseModel):
+#     ticker: str = Field(..., description="Stock ticker symbol to analyze")
+#     period: str = Field(default="6mo", description="Time period for analysis (1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max)")
 
 class StockAnalysisTool(BaseTool):
     name:str  = "analyze_stock"
-    description:str = "Analyze a stock and provide buy/sell/hold recommendation based on recent performance"
-    args_schema: Type[BaseModel] = StockAnalysisInput
+    description:str= (
+        "Analyze a stock and provide buy/sell/hold recommendation. "
+        "Input must be a string in the format: 'ticker=AAPL, period=6mo'"
+    )
     
-    def _run(self, ticker: str, period: str = "6mo") -> str:
+    
+    def _run(self, query: str) -> str:
+        match = re.search(r"ticker=(\w+),?\s*period=([\w\d]+)", query)
+        if not match:
+            return "Invalid input format. Use: 'ticker=AAPL, period=6mo'"
+
+        ticker = match.group(1).upper()
+        period = match.group(2)
         try:
             stock = yf.Ticker(ticker)
             hist = stock.history(period=period)
@@ -147,4 +156,4 @@ if __name__ == "__main__":
 
     # Test StockAnalysisTool
     stock_analysis_tool = StockAnalysisTool()
-    print(stock_analysis_tool._run(ticker, period="6mo"))
+    print(stock_analysis_tool._run('ticker=AAPL, period=6mo'))
