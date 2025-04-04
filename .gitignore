@@ -1,0 +1,41 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual Environment
+venv/
+.env
+.env.local
+*.venv
+
+# Dependency files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDE-specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs & caches
+logs/
+*.log
+*.cache
+*.pytest_cache/
+
+# Docker & Build files
+*.dockerfile
+docker-compose.yml
+build/
+dist/
+
+# Jupyter Notebooks (if any)
+.ipynb_checkpoints/
+
+# API keys & Config files
+config.json
+config.yaml
+secrets.json
+*.pem
