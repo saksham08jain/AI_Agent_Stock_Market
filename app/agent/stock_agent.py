@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
     # print("\nAgent Response:\n", response)
 
-    query = "Which stock should i buy tesla or apple based on past 6 months performance"  # Example prompt
+    query = "should i buy apple stock?"  # Example prompt
 
     response = asyncio.run(agent.process_query(query))
 
