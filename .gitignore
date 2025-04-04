@@ -39,3 +39,5 @@ config.json
 config.yaml
 secrets.json
 *.pem
+
+.env

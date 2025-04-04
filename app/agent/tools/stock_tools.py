@@ -145,9 +145,9 @@ Reasoning:
         except Exception as e:
             return f"Error analyzing stock {ticker}: {str(e)}"
 
-    async def _arun(self, ticker: str, period: str = "6mo") -> str:
+    async def _arun(self, query:str) -> str:
         # For async implementation
-        return self._run(ticker, period)
+        return self._run(query)
 if __name__ == "__main__":
     # Test StockPriceTool
     stock_price_tool = StockPriceTool()
