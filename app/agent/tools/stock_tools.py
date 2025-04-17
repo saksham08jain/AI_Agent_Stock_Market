@@ -5,9 +5,16 @@ from typing import Optional, Type
 import re
 
 class StockPriceInput(BaseModel):
+    '''
+    Input schema for stock price tool.
+    '''
     ticker: str = Field(..., description="Stock ticker symbol (e.g., AAPL, MSFT)") 
 
 class StockPriceTool(BaseTool):
+    '''
+    Tool to get the latest stock price information.Returns a string with the latest price, open, high, low, volume, and change percentage.
+    '''
+    
     name:str= "get_stock_price"
     description:str = "Get the latest stock price information for a given ticker symbol"
     args_schema: Type[BaseModel] = StockPriceInput
@@ -46,6 +53,9 @@ Timestamp: {data.index[-1].strftime('%Y-%m-%d %H:%M:%S')}
         # For async implementation
         return self._run(ticker)
 
+#This one was removed because ReACT prompt does not support input schema yet due to it having two params.
+#Thats why it was solved with regex in the StockAnalysisTool.
+
 # class StockAnalysisInput(BaseModel):
 #     ticker: str = Field(..., description="Stock ticker symbol to analyze")
 #     period: str = Field(default="6mo", description="Time period for analysis (1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max)")
@@ -56,6 +66,7 @@ class StockAnalysisTool(BaseTool):
         "Analyze a stock and provide buy/sell/hold recommendation. "
         "Input must be a string in the format: 'ticker=AAPL, period=6mo'"
     )
+    #maybe i should branch and test changing description and name to see if it works better.maybe few shot examples would have worked better 
     
     
     def _run(self, query: str) -> str:
@@ -145,6 +156,8 @@ Reasoning:
         except Exception as e:
             return f"Error analyzing stock {ticker}: {str(e)}"
 
+    #This just satisfies the async requirement of the tool interface.
+    #Actually, it runs the same code as _run. and thus is blcoking 
     async def _arun(self, query:str) -> str:
         # For async implementation
         return self._run(query)
