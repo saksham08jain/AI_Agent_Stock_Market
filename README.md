@@ -14,7 +14,7 @@ A minimal AI agent for real-time stock analysis using Mistral 7B and the ReAct p
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/stock-market-ai-agent.git
+git clone https://github.com/saksham08jain/stock-market-ai-agent.git
 cd stock-market-ai-agent
 ```
 
